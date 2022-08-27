@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_ui_action">
+    <sys_ui_action action="INSERT_OR_UPDATE">
+        <action_name/>
+        <active>true</active>
+        <client>false</client>
+        <client_script_v2><![CDATA[function onClick(g_form) {
+
+}]]></client_script_v2>
+        <comments/>
+        <condition/>
+        <form_action>false</form_action>
+        <form_button>false</form_button>
+        <form_button_v2>false</form_button_v2>
+        <form_context_menu>false</form_context_menu>
+        <form_link>false</form_link>
+        <form_menu_button_v2>false</form_menu_button_v2>
+        <form_style/>
+        <hint/>
+        <isolate_script>false</isolate_script>
+        <list_action>true</list_action>
+        <list_banner_button>false</list_banner_button>
+        <list_button>false</list_button>
+        <list_choice>false</list_choice>
+        <list_context_menu>false</list_context_menu>
+        <list_link>true</list_link>
+        <list_save_with_form_button>false</list_save_with_form_button>
+        <list_style/>
+        <messages/>
+        <name>Open GetLegoSets Remote</name>
+        <onclick/>
+        <order>100</order>
+        <script><![CDATA[//gs.addInfoMessage('The selekted Theme ID is: ' + current.theme_id + ' and years between: ' + current.minimum_year + ' - ' + current.max_year);
+var theme = current.getValue('theme_id');
+var firstyear = current.getValue('minimum_year');
+var lastyear = current.getValue('max_year');
+
+var gr = new GlideRecord('sys_rest_message_fn_param_defs');
+var found = gr.get('dd7ce6538797cd109f45b8c6cebb3513');
+if(found){
+	gr.setValue('value',theme);
+	gr.update('Dynamic adjustment for Remotetable x_356576_rebrick2_st_legoset_info_remote!');
+}
+found = gr.get('96bca61787d7cd109f45b8c6cebb35b7');
+if(found) {
+	gr.setValue('value', firstyear);
+	gr.update('Dynamic adjustment for Remotetable x_356576_rebrick2_st_legoset_info_remote!');
+}
+found = gr.get('688eae9787d7cd109f45b8c6cebb356a');
+if(found) {
+	gr.setValue('value', lastyear);
+	gr.update('Dynamic adjustment for Remotetable x_356576_rebrick2_st_legoset_info_remote!');
+}
+var encodedQuery = 'theme_id=' + theme.toString() + '^min_year=' + firstyear.toString() + '^max_year=' + lastyear.toString();
+//var glRec =  new GlideRecord('x_356576_rebrick2_st');
+//glRec.addQuery("min_year",firstyear);
+//glRec.addQuery("max_year",lastyear);
+//glRec.addQuery("theme_id",theme);    //glRec.orderBy('set_num');
+//glRec.query();
+/*var gURI = new GlideURI();
+url = gURI.toString('x_356576_rebrick2_st_legoset_info_remote_list.do');
+action.setURLParameter('sysparm_query', encodedQuery);
+action.setRedirectURL(url);*/
+//action.setReturnURL(url);
+//glRec.query();
+var urlParam ='x_356576_rebrick2_st_legoset_info_remote_list.do?sysparm_query=theme_id='+ theme + '^min_year=' + firstyear + '^max_year=' + lastyear + '&sysparm_first_row=1&sysparm_view=';
+var gURI = new GlideURI();
+//url = gURI.toString('x_356576_rebrick2_st_legoset_info_remote_list.do?sysparm_query=theme_id=130^min_year=1979^max_year=1986&sysparm_first_row=1&sysparm_view=');
+url = gURI.toString(urlParam);
+gs.setRedirect(url);]]></script>
+        <show_insert>true</show_insert>
+        <show_multiple_update>false</show_multiple_update>
+        <show_query>false</show_query>
+        <show_update>true</show_update>
+        <sys_class_name>sys_ui_action</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-05-11 13:48:24</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>1d92c45f875f8d109f45b8c6cebb3539</sys_id>
+        <sys_mod_count>76</sys_mod_count>
+        <sys_name>Open GetLegoSets Remote</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="RebrickableLookup" source="x_356576_rebrick2">17eec7e8871f45109f45b8c6cebb35c9</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="RebrickableLookup">17eec7e8871f45109f45b8c6cebb35c9</sys_scope>
+        <sys_update_name>sys_ui_action_1d92c45f875f8d109f45b8c6cebb3539</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-08-27 20:56:56</sys_updated_on>
+        <table>x_356576_rebrick2_legosetinfo</table>
+        <ui11_compatible>true</ui11_compatible>
+        <ui16_compatible>false</ui16_compatible>
+    </sys_ui_action>
+</record_update>

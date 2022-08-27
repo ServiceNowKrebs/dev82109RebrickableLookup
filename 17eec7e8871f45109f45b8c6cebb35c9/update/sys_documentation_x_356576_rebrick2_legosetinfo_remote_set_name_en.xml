@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update>
+    <sys_documentation element="remote_set_name" label="Remote Set Name" language="en" table="x_356576_rebrick2_legosetinfo">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>remote_set_name</element>
+            <help/>
+            <hint/>
+            <label>Remote Set Name</label>
+            <language>en</language>
+            <name>x_356576_rebrick2_legosetinfo</name>
+            <plural>Remote Set Names</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>admin</sys_created_by>
+            <sys_created_on>2022-05-20 12:36:19</sys_created_on>
+            <sys_id>2d16e6ca872749509f45b8c6cebb35f7</sys_id>
+            <sys_mod_count>2</sys_mod_count>
+            <sys_name>Remote Set Name</sys_name>
+            <sys_package display_value="RebrickableLookup" source="x_356576_rebrick2">17eec7e8871f45109f45b8c6cebb35c9</sys_package>
+            <sys_policy/>
+            <sys_scope display_value="RebrickableLookup">17eec7e8871f45109f45b8c6cebb35c9</sys_scope>
+            <sys_update_name>sys_documentation_x_356576_rebrick2_legosetinfo_remote_set_name_en</sys_update_name>
+            <sys_updated_by>admin</sys_updated_by>
+            <sys_updated_on>2022-08-27 20:36:17</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>
