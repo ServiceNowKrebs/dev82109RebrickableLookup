@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="9c164c34871385109f45b8c6cebb3560" label="LegosetInfo" max_length="40" name="x_356576_rebrick2_legosetinfo" type="collection">
+        <element label="Maximum Year" max_length="10" name="max_year" type="string"/>
+        <element label="Minimum Year" max_length="10" name="minimum_year" type="string"/>
+        <element label="Remote Set Name" max_length="32" name="remote_set_name" reference="x_356576_rebrick2_st_legoset_info_remote_vers2" type="reference"/>
+        <element label="Set Number" max_length="20" name="setnumber" type="string"/>
+        <element label="Set Name" max_length="200" name="set_name" type="string"/>
+        <element label="Theme ID" max_length="10" name="theme_id" type="string"/>
+        <index name="index">
+            <element name="remote_set_name"/>
+        </index>
+    </element>
+</database>

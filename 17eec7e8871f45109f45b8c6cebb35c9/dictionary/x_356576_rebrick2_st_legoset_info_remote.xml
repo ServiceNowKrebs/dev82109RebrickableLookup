@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><database>
+    <element db_object_id="4f390736871f4d109f45b8c6cebb35a0" label="Legoset Info Remote" max_length="40" name="x_356576_rebrick2_st_legoset_info_remote" type="collection">
+        <element label="Last Modified" max_length="200" name="last_modified_dt" type="string"/>
+        <element label="Max Year" max_length="10" name="max_year" type="string"/>
+        <element label="Min Year" max_length="10" name="min_year" type="string"/>
+        <element label="Name" max_length="200" name="name" type="string"/>
+        <element label="Number of Parts" max_length="10" name="num_parts" type="string"/>
+        <element label="Image URL" max_length="400" name="set_img_url" type="url"/>
+        <element label="Set Number" max_length="22" name="set_num" type="string"/>
+        <element label="Set URL" max_length="400" name="set_url" type="url"/>
+        <element label="Theme ID" max_length="10" name="theme_id" type="string"/>
+        <element label="Published Year" max_length="10" name="year" type="string"/>
+    </element>
+</database>

@@ -15,6 +15,7 @@
         <form_link>false</form_link>
         <form_menu_button_v2>false</form_menu_button_v2>
         <form_style/>
+        <format_for_configurable_workspace>false</format_for_configurable_workspace>
         <hint/>
         <isolate_script>false</isolate_script>
         <list_action>true</list_action>
@@ -51,6 +52,8 @@ if(found) {
 	gr.update('Dynamic adjustment for Remotetable x_356576_rebrick2_st_legoset_info_remote!');
 }
 var encodedQuery = 'theme_id=' + theme.toString() + '^min_year=' + firstyear.toString() + '^max_year=' + lastyear.toString();
+
+
 //var glRec =  new GlideRecord('x_356576_rebrick2_st');
 //glRec.addQuery("min_year",firstyear);
 //glRec.addQuery("max_year",lastyear);
@@ -62,7 +65,7 @@ action.setURLParameter('sysparm_query', encodedQuery);
 action.setRedirectURL(url);*/
 //action.setReturnURL(url);
 //glRec.query();
-var urlParam ='x_356576_rebrick2_st_legoset_info_remote_list.do?sysparm_query=theme_id='+ theme + '^min_year=' + firstyear + '^max_year=' + lastyear + '&sysparm_first_row=1&sysparm_view=';
+var urlParam ='x_356576_rebrick2_st_legoset_info_remote_list.do?sysparm_query=theme_id='+ theme + '^min_year=' + firstyear + '^max_year=' + lastyear + '&sysparm_first_row=1&sysparm_view=&';
 var gURI = new GlideURI();
 //url = gURI.toString('x_356576_rebrick2_st_legoset_info_remote_list.do?sysparm_query=theme_id=130^min_year=1979^max_year=1986&sysparm_first_row=1&sysparm_view=');
 url = gURI.toString(urlParam);
@@ -77,7 +80,7 @@ gs.setRedirect(url);]]></script>
         <sys_domain>global</sys_domain>
         <sys_domain_path>/</sys_domain_path>
         <sys_id>1d92c45f875f8d109f45b8c6cebb3539</sys_id>
-        <sys_mod_count>76</sys_mod_count>
+        <sys_mod_count>78</sys_mod_count>
         <sys_name>Open GetLegoSets Remote</sys_name>
         <sys_overrides/>
         <sys_package display_value="RebrickableLookup" source="x_356576_rebrick2">17eec7e8871f45109f45b8c6cebb35c9</sys_package>
@@ -85,7 +88,7 @@ gs.setRedirect(url);]]></script>
         <sys_scope display_value="RebrickableLookup">17eec7e8871f45109f45b8c6cebb35c9</sys_scope>
         <sys_update_name>sys_ui_action_1d92c45f875f8d109f45b8c6cebb3539</sys_update_name>
         <sys_updated_by>admin</sys_updated_by>
-        <sys_updated_on>2022-08-27 20:56:56</sys_updated_on>
+        <sys_updated_on>2022-09-19 20:04:57</sys_updated_on>
         <table>x_356576_rebrick2_legosetinfo</table>
         <ui11_compatible>true</ui11_compatible>
         <ui16_compatible>false</ui16_compatible>

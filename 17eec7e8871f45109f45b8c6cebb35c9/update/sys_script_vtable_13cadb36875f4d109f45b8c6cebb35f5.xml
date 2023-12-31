@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_vtable">
+    <sys_script_vtable action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <advanced>true</advanced>
+        <cache_isolation_level>USER</cache_isolation_level>
+        <cache_strategy>CACHE_BY_QUERY</cache_strategy>
+        <cache_ttl>300</cache_ttl>
+        <name>DefinitionLegoSetInfo</name>
+        <script><![CDATA[(function executeQuery(v_table, v_query) {
+	// Main API:
+    //    v_table.addRow({ ... }) - adds a row to the result set
+    //gs.addInfoMessage(v_query.getEncodedQuery());
+    // There are also query helper methods
+    //    v_query.getEncodedQuery() - returns encoded querystring
+    //    v_query.getCondition(field) - returns encoded querystring for the given field (includes field name, operator, and value)
+    //    v_query.getParameter(field) - returns parameter for the given field (only includes value for equality conditions)
+    //    v_query.isGet() - returns whether the query is a single get by sys_id
+    //    v_query.getSysId() - returns parameter for sys_id field
+    //    v_query.isTextSearch() - returns whether the query contains a text query parameter
+    //    v_query.getTextSearch() - returns text search query parameter (internal field name 123TEXTQUERY321)
+    //    v_query.getFirstRowWanted() - returns the first row to include
+    //    v_query.getLastRowWanted() - returns the last row to include
+    // Note: You must define sys_id for each row so that forms and lists for this table work properly
+    // Your code goes here
+	//sys_filter_list.do
+	//sys_ui_list_control
+	
+	gs.addInfoMessage(v_query.getEncodedQuery());
+	var theme = v_query.getParameter("theme_id"); //.toString();
+	var minYear = v_query.getParameter("min_year"); //.toString();        
+	var maxYear = v_query.getParameter("max_year"); //.toString();
+	//getLegoSetsArrayRemote(v_table, v_query);
+	//getLEGOSetsArrayRemoteLocal(v_table,v_query);     //,theme,minYear,maxYear);
+	try {
+		var r = new sn_ws.RESTMessageV2();
+		r.setEndpoint('https://rebrickable.com/api/v3/lego/sets/');
+		r.setHttpMethod('get');
+		r.setQueryParameter('key','0c5e152cea36959b6fa6174e40db391d');
+		if(typeof theme == 'string'){
+			r.setQueryParameter('theme_id', theme);
+		}
+		if(typeof minYear == 'string'){
+			r.setQueryParameter('min_year', minYear); 
+		}
+		if(typeof maxYear == 'string'){
+			r.setQueryParameter('max_year', maxYear); 
+		}
+		r.setQueryParameter('ORDERBY','set_num');  
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if (response.haveError()) {
+				v_query.setLastErrorMessage(response.getErrorMessage());
+				return;
+		}
+		var responseObj = JSON.parse(responseBody); 
+		var resultArr = responseObj.results; // all the records are contained in an array 'result'
+		for (var i=0; i< resultArr.length; i++){
+		//build the row
+			var row = {}; var id = 77123 + i;
+			row.last_modified_dt = resultArr[i].last_modified_dt;
+			row.name = resultArr[i].name;   //gs.addInfoMessage(resultArr[i].name + ' Ausgabe');
+			row.num_parts = resultArr[i].num_parts;
+			row.set_num = resultArr[i].set_num;
+			row.sys_id = resultArr[i].set_num;  //gs.generateGUID();
+			row.set_url = resultArr[i].set_url;
+			row.theme_id = resultArr[i].theme_id;
+			row.year = resultArr[i].year;
+			row.set_img_url = resultArr[i].set_img_url;
+			row.min_year = minYear;
+			row.max_year = maxYear;
+			// add the row to the remote table          //gs.addInfoMessage(row.name); gs.addInfoMessage(row.set_num);
+			v_table.addRow(row);
+		}
+	}
+	catch(ex) {
+		//v_query.setLastErrorMessage(ex.message); //
+		gs.debug(ex.message);
+		return;
+	}
+})(v_table, v_query);
+
+function splitQuery(encodedQuery){
+	segmente = encodedQuery.split('^');
+	parameter = {};
+	for(var i = 0; i < segmente.length; i++){
+		var paar = segmente[i].split('=');
+		parameter[paar[0]]=paar[1];   //gs.addInfoMessage(paar[0] + ', ' + paar[1]);
+	}
+	return parameter;
+}
+
+function getTransformerDefinition() {
+		// create a rule list to map a field to its element path
+		var ruleList = new sn_tfrm.TransformerRuleList()
+			.fromJSON() // the response body is a JSON
+			// 'active' field maps to path '$.active'
+			.addRule("last_modified_dt", "$.last_modified_dt")
+			.addRule("name", "$.name")
+			.addRule("num_parts", "$.num_parts")
+			.addRule("set_num", "$.set_num")
+			.addRule("sys_id", "$.set_num")
+			.addRule("set_url", "$.set_url")
+			.addRule("theme_id", "$.theme_id")
+			.addRule("year", "$.year")
+			.addRule("set_img_url", "$.set_img_url");
+		var recordPath = "$.result";
+		return new sn_tfrm.TransformerDefinition(ruleList, recordPath);
+	}
+
+function getLEGOSetRemote(v_table, v_query){
+	try {
+		var r = new sn_ws.RESTMessageV2('x_356576_rebrick2.RebrickableInfo', 'GetLegoset');
+		r.setStringParameterNoEscape('setNr', '924-1');
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if (response.haveError()) {
+				v_query.setLastErrorMessage(response.getErrorMessage());
+				return;
+		}
+	}
+	catch(ex) {
+		v_query.setLastErrorMessage(ex.message); //gs.debug(ex.message);
+		return;
+	}
+	// Parse response
+	gs.addInfoMessage(responseBody);
+		//var json = new global.JSON();
+		var responseObj = JSON.parse(responseBody);
+		gs.addInfoMessage(responseObj);
+		var resultArr = responseObj; // all the records are contained in an array 'result'
+		//gs.addInfoMessage(resultArr);
+		//for (var i=0; i< resultArr.length; i++){
+			//build the row
+			var i = 1;
+			var row = {};
+			var id = 77123 + i;
+			// map fields from the result
+			row.last_modified_dt = resultArr.last_modified_dt;
+			row.name = resultArr.name;
+			row.num_parts = resultArr.num_parts;
+			row.set_num = resultArr.set_num;
+			row.sys_id = id;
+			row.set_url = resultArr.set_url;
+			row.theme_id = resultArr.theme_id;
+			row.year = resultArr.year;
+			row.set_img_url = resultArr.set_img_url;
+			// add the row to the remote table
+			v_table.addRow(row);
+}
+
+function getLEGOSetsArrayRemoteLocal(v_table,v_query) {
+	var theme = v_query.getParameter("theme_id");
+	var queryParameter = splitQuery(v_query.getEncodedQuery());
+	var minYear = queryParameter['min_year'];      
+	var maxYear = queryParameter['max_year']; 
+	try {
+		//gs.addInfoMessage(theme_id +', ' + min_year + ', ' + max_year);
+		var r = new sn_ws.RESTMessageV2();
+		r.setEndpoint('https://rebrickable.com/api/v3/lego/sets/');
+		r.setHttpMethod('get');
+		r.setQueryParameter('key','0c5e152cea36959b6fa6174e40db391d');
+		gs.addInfoMessage(theme);
+		r.setQueryParameter('theme_id', theme);
+		r.setQueryParameter('min_year', minYear);  //min_year);
+		gs.addInfoMessage(minYear);
+		r.setQueryParameter('max_year', maxYear);  //max_year);
+		gs.addInfoMessage(maxYear);
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if (response.haveError()) {
+				v_query.setLastErrorMessage(response.getErrorMessage());
+				return;
+		}
+		var responseObj = JSON.parse(responseBody); //gs.addInfoMessage(responseObj);
+		var resultArr = responseObj.results; // all the records are contained in an array 'result' //gs.addInfoMessage(resultArr);
+		for (var i=0; i< resultArr.length; i++){
+		//build the row
+			var row = {};
+			var id = 77123 + i;
+			row.last_modified_dt = resultArr[i].last_modified_dt;
+			row.name = resultArr[i].name;
+			row.num_parts = resultArr[i].num_parts;
+			row.set_num = resultArr[i].set_num;
+			row.sys_id = id;
+			row.set_url = resultArr[i].set_url;
+			row.theme_id = resultArr[i].theme_id;
+			row.year = resultArr[i].year;
+			row.set_img_url = resultArr[i].set_img_url;
+			// add the row to the remote table
+			v_table.addRow(row);
+		}
+	}
+	catch(ex) {
+		v_query.setLastErrorMessage(ex.message); //
+		gs.debug(ex.message);
+		return;
+	}
+}
+
+function getLegoSetsArrayRemote(v_table, v_query) {
+	try {
+		var r = new sn_ws.RESTMessageV2('x_356576_rebrick2.RebrickableInfo', 'GetLegoSets');
+		//r.setQueryParameter('theme_id','130');
+		//r.setQueryParameter('min_year','1981');
+		//r.setQueryParameter('max_year','1983');
+		var response = r.execute();
+		var responseBody = response.getBody();
+		var httpStatus = response.getStatusCode();
+		if (response.haveError()) {
+				v_query.setLastErrorMessage(response.getErrorMessage());
+				return;
+		}
+	}
+	catch(ex) {
+		v_query.setLastErrorMessage(ex.message); //
+		gs.debug(ex.message);
+		return;
+	}	//gs.addInfoMessage(responseBody);
+		var responseObj = JSON.parse(responseBody); //gs.addInfoMessage(responseObj);
+		var resultArr = responseObj.results; // all the records are contained in an array 'result' //gs.addInfoMessage(resultArr);
+		for (var i=0; i< resultArr.length; i++){
+		//build the row
+			var row = {};
+			var id = 77123 + i;
+			row.last_modified_dt = resultArr[i].last_modified_dt;
+			row.name = resultArr[i].name;
+			row.num_parts = resultArr[i].num_parts;
+			row.set_num = resultArr[i].set_num;
+			row.sys_id = id;
+			row.set_url = resultArr[i].set_url;
+			row.theme_id = resultArr[i].theme_id;
+			row.year = resultArr[i].year;
+			row.set_img_url = resultArr[i].set_img_url;
+			// add the row to the remote table
+			v_table.addRow(row);
+		}
+	}
+	
+
+
+//getLEGOSetRemote(v_table, v_query);
+	//gs.addInfoMessage(v_table);
+	//gs.addInfoMessage(v_query.getEncodedQuery());
+	
+	//gs.addInfoMessage(responseBody);
+	//var ruleList = new sn_tfrm.TransformerRuleList()
+	//		.fromJSON() // the response body is a JSON
+	//		// 'active' field maps to path '$.active'
+	//		.addRule("last_modified_dt", "$.last_modified_dt")
+	//		.addRule("name", "$.name")
+	//		.addRule("num_parts", "$.num_parts")
+	//		.addRule("set_num", "$.set_num")
+	//		.addRule("sys_id", "$.set_num")
+	//		.addRule("set_url", "$.set_url")
+	//		.addRule("theme_id", "$.theme_id")
+	//		.addRule("year", "$.year")
+	//		.addRule("set_img_url", "$.set_img_url");
+	//var recordPath = "$.result";
+	//var transformerDefinition = new sn_tfrm.TransformerDefinition(ruleList, recordPath);
+	////var transformerDefinition = getTransformerDefinition();
+	//var transformer = new sn_tfrm.Transformer(transformerDefinition, responseBody); // transformer parses the responseBody and extracts rows
+	//gs.addInfoMessage("Quatsch");
+	//while (transformer.transform()) { 
+	//	// row is field-value map e.g. { active:"true", number: "INC0000001"}
+	//	gs.addInfoMessage(transformer.getRow());
+	//	var row = transformer.getRow();
+	//	// you may do any additional transformations to the row like GlideDuration, GlideDataTime etc. For example,
+	//	// row.duration = new GlideDuration(row.duration);
+	//	// finally add the row to the remote table
+	//	v_table.addRow(row);
+	//}
+
+/*
+var gURI = new GlideURI();
+url = gURI.toString('x_356576_rebrick2_st_legoset_info_remote_list.do?sysparm_query=theme_id=130^min_year=1979^max_year=1986&sysparm_first_row=1&sysparm_view=');
+gs.setRedirect(url);
+var firstyear = '1972';
+var lastyear = '2022';
+var theme = '456';
+var i=0;
+var grX = new GlideRecord('x_356576_rebrick2_st_legoset_info_remote');
+grX.addQuery("min_year",firstyear);
+grX.addQuery("max_year",lastyear);
+grX.addQuery("theme_id",theme);  
+grX.query();
+while (grX.next()) {
+    gs.info(i.toString() + '). Name: ' + grX.getValue('name'));
+    gs.info('Set-Nummer: ' + grX.getValue('set_num'));
+    gs.info('Theme ID: ' + grX.getValue('theme_id'));
+    gs.info('Year: ' + grX.getValue('year'));
+    gs.info('Img URL: ' + grX.getValue('set_img_url'));
+    gs.info('Set URL: ' + grX.getValue('set_url'));
+    i++;
+}
+grX.addQuery("min_year",firstyear);
+grX.addQuery("max_year",lastyear);
+grX.addQuery("theme_id",theme);  
+grX.query();
+*/]]></script>
+        <sys_class_name>sys_script_vtable</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2022-05-10 14:08:56</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_id>13cadb36875f4d109f45b8c6cebb35f5</sys_id>
+        <sys_mod_count>117</sys_mod_count>
+        <sys_name>DefinitionLegoSetInfo</sys_name>
+        <sys_package display_value="RebrickableLookup" source="x_356576_rebrick2">17eec7e8871f45109f45b8c6cebb35c9</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="RebrickableLookup">17eec7e8871f45109f45b8c6cebb35c9</sys_scope>
+        <sys_update_name>sys_script_vtable_13cadb36875f4d109f45b8c6cebb35f5</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2022-05-20 09:32:00</sys_updated_on>
+        <table>x_356576_rebrick2_st_legoset_info_remote</table>
+    </sys_script_vtable>
+</record_update>
